@@ -11,14 +11,15 @@ def gen_names(n_workers=4):
     genders = [option['value'] for option in template.select('input[name="Gender"]')]
 
     all_names = []
-    session = FuturesSession(n_workers=n_workers)
-    futures = [session.post(name_url, data={'generate': 'Generate',
+    session = FuturesSession(max_workers=n_workers)
+    futures = [(session.post(NAME_URL, data={'generate': 'Generate',
                                             'Gender': gender,
-                                            'Languages': region})
+                                             'Languages': region}),
+                gender, region)
                for gender, region in itertools.product(genders, regions)]
 
-    for future in futures:
-        names = list(BeautifulSoup(future.result().text).select('div#mainContent')[0].stripped_strings)
+    for future, gender, region in futures:
+        names = list(BeautifulSoup(future.result().text, 'lxml').select('div#mainContent')[0].stripped_strings)
         all_names.extend(zip(names, [gender] * len(names), [region] * len(names)))
 
     return all_names
