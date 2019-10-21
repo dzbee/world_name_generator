@@ -16,7 +16,7 @@ pkg-resources==0.0.0
 prompt-toolkit==1.0.15
 ptyprocess==0.5.2
 Pygments==2.2.0
-requests==2.18.4
+requests==2.20.0
 requests-futures==0.9.7
 scandir==1.7
 simplegeneric==0.8.1
